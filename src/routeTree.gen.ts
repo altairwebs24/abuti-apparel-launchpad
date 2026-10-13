@@ -16,7 +16,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as StoryRouteImport } from './routes/story'
 import { Route as TheBeesRouteImport } from './routes/the-bees'
-import { Route as ShopProductIdRouteImport } from './routes/shop.$productId'
+import { Route as ShopProductIdRouteImport } from './routes/shop_.$productId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -54,9 +54,9 @@ const TheBeesRoute = TheBeesRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShopProductIdRoute = ShopProductIdRouteImport.update({
-  id: '/$productId',
-  path: '/$productId',
-  getParentRoute: () => ShopRoute,
+  id: '/shop_/$productId',
+  path: '/shop/$productId',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -64,7 +64,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/bag': typeof BagRoute
   '/contact': typeof ContactRoute
-  '/shop': typeof ShopRouteWithChildren
+  '/shop': typeof ShopRoute
   '/story': typeof StoryRoute
   '/the-bees': typeof TheBeesRoute
   '/shop/$productId': typeof ShopProductIdRoute
@@ -74,7 +74,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/bag': typeof BagRoute
   '/contact': typeof ContactRoute
-  '/shop': typeof ShopRouteWithChildren
+  '/shop': typeof ShopRoute
   '/story': typeof StoryRoute
   '/the-bees': typeof TheBeesRoute
   '/shop/$productId': typeof ShopProductIdRoute
@@ -85,10 +85,10 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/bag': typeof BagRoute
   '/contact': typeof ContactRoute
-  '/shop': typeof ShopRouteWithChildren
+  '/shop': typeof ShopRoute
   '/story': typeof StoryRoute
   '/the-bees': typeof TheBeesRoute
-  '/shop/$productId': typeof ShopProductIdRoute
+  '/shop_/$productId': typeof ShopProductIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -120,7 +120,7 @@ export interface FileRouteTypes {
     | '/shop'
     | '/story'
     | '/the-bees'
-    | '/shop/$productId'
+    | '/shop_/$productId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -128,9 +128,10 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   BagRoute: typeof BagRoute
   ContactRoute: typeof ContactRoute
-  ShopRoute: typeof ShopRouteWithChildren
+  ShopRoute: typeof ShopRoute
   StoryRoute: typeof StoryRoute
   TheBeesRoute: typeof TheBeesRoute
+  ShopProductIdRoute: typeof ShopProductIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -184,34 +185,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TheBeesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/shop/$productId': {
-      id: '/shop/$productId'
-      path: '/$productId'
+    '/shop_/$productId': {
+      id: '/shop_/$productId'
+      path: '/shop/$productId'
       fullPath: '/shop/$productId'
       preLoaderRoute: typeof ShopProductIdRouteImport
-      parentRoute: typeof ShopRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
-
-interface ShopRouteChildren {
-  ShopProductIdRoute: typeof ShopProductIdRoute
-}
-
-const ShopRouteChildren: ShopRouteChildren = {
-  ShopProductIdRoute: ShopProductIdRoute,
-}
-
-const ShopRouteWithChildren = ShopRoute._addFileChildren(ShopRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   BagRoute: BagRoute,
   ContactRoute: ContactRoute,
-  ShopRoute: ShopRouteWithChildren,
+  ShopRoute: ShopRoute,
   StoryRoute: StoryRoute,
   TheBeesRoute: TheBeesRoute,
+  ShopProductIdRoute: ShopProductIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
