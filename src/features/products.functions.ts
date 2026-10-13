@@ -19,7 +19,8 @@ export const adminProducts=createServerFn({method:'POST'}).middleware([requireSu
 export const saveProduct=createServerFn({method:'POST'}).middleware([requireSupabaseAuth]).inputValidator((input:unknown)=>productSchema.parse(input)).handler(async({context,data})=>{
  const {data:allowed}=await context.supabase.rpc('has_role',{_user_id:context.userId,_role:'admin'});if(!allowed)throw new Error('Administrator access required');
  const {id,...values}=data;
- const {error}=await context.supabase.from('products').upsert(id?{...values,id}:values);if(error)throw new Error(error.message);return {success:true};
+ const row:Database['public']['Tables']['products']['Insert']=id?{...values,id}:values;
+ const {error}=await context.supabase.from('products').upsert(row);if(error)throw new Error(error.message);return {success:true};
 });
 export const deleteProduct=createServerFn({method:'POST'}).middleware([requireSupabaseAuth]).inputValidator((input:unknown)=>z.object({id:z.string().uuid()}).parse(input)).handler(async({context,data})=>{
  const {data:allowed}=await context.supabase.rpc('has_role',{_user_id:context.userId,_role:'admin'});if(!allowed)throw new Error('Administrator access required');
