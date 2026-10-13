@@ -11,10 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as BagRouteImport } from './routes/bag'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as StoryRouteImport } from './routes/story'
 import { Route as TheBeesRouteImport } from './routes/the-bees'
+import { Route as ShopProductIdRouteImport } from './routes/shop.$productId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -24,6 +26,11 @@ const IndexRoute = IndexRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BagRoute = BagRouteImport.update({
+  id: '/bag',
+  path: '/bag',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -46,46 +53,82 @@ const TheBeesRoute = TheBeesRouteImport.update({
   path: '/the-bees',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShopProductIdRoute = ShopProductIdRouteImport.update({
+  id: '/$productId',
+  path: '/$productId',
+  getParentRoute: () => ShopRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/bag': typeof BagRoute
   '/contact': typeof ContactRoute
-  '/shop': typeof ShopRoute
+  '/shop': typeof ShopRouteWithChildren
   '/story': typeof StoryRoute
   '/the-bees': typeof TheBeesRoute
+  '/shop/$productId': typeof ShopProductIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/bag': typeof BagRoute
   '/contact': typeof ContactRoute
-  '/shop': typeof ShopRoute
+  '/shop': typeof ShopRouteWithChildren
   '/story': typeof StoryRoute
   '/the-bees': typeof TheBeesRoute
+  '/shop/$productId': typeof ShopProductIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/bag': typeof BagRoute
   '/contact': typeof ContactRoute
-  '/shop': typeof ShopRoute
+  '/shop': typeof ShopRouteWithChildren
   '/story': typeof StoryRoute
   '/the-bees': typeof TheBeesRoute
+  '/shop/$productId': typeof ShopProductIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/contact' | '/shop' | '/story' | '/the-bees'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/bag'
+    | '/contact'
+    | '/shop'
+    | '/story'
+    | '/the-bees'
+    | '/shop/$productId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/contact' | '/shop' | '/story' | '/the-bees'
+  to:
+    | '/'
+    | '/admin'
+    | '/bag'
+    | '/contact'
+    | '/shop'
+    | '/story'
+    | '/the-bees'
+    | '/shop/$productId'
   id:
-    '__root__' | '/' | '/admin' | '/contact' | '/shop' | '/story' | '/the-bees'
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/bag'
+    | '/contact'
+    | '/shop'
+    | '/story'
+    | '/the-bees'
+    | '/shop/$productId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
+  BagRoute: typeof BagRoute
   ContactRoute: typeof ContactRoute
-  ShopRoute: typeof ShopRoute
+  ShopRoute: typeof ShopRouteWithChildren
   StoryRoute: typeof StoryRoute
   TheBeesRoute: typeof TheBeesRoute
 }
@@ -104,6 +147,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bag': {
+      id: '/bag'
+      path: '/bag'
+      fullPath: '/bag'
+      preLoaderRoute: typeof BagRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -134,14 +184,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TheBeesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/shop/$productId': {
+      id: '/shop/$productId'
+      path: '/$productId'
+      fullPath: '/shop/$productId'
+      preLoaderRoute: typeof ShopProductIdRouteImport
+      parentRoute: typeof ShopRoute
+    }
   }
 }
+
+interface ShopRouteChildren {
+  ShopProductIdRoute: typeof ShopProductIdRoute
+}
+
+const ShopRouteChildren: ShopRouteChildren = {
+  ShopProductIdRoute: ShopProductIdRoute,
+}
+
+const ShopRouteWithChildren = ShopRoute._addFileChildren(ShopRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
+  BagRoute: BagRoute,
   ContactRoute: ContactRoute,
-  ShopRoute: ShopRoute,
+  ShopRoute: ShopRouteWithChildren,
   StoryRoute: StoryRoute,
   TheBeesRoute: TheBeesRoute,
 }
