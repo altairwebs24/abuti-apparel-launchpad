@@ -9,6 +9,8 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        editorial: "rounded-none bg-lime text-ink uppercase tracking-widest text-[10px] h-12 px-6 hover:bg-lime/85",
+        photo: "rounded-none border border-paper/60 bg-transparent text-paper uppercase tracking-widest text-[10px] h-12 px-6 hover:bg-paper hover:text-ink",
         default: "bg-primary text-primary-foreground shadow hover:bg-primary/90",
         destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline:
