@@ -1,11 +1,3 @@
-import logo from '@/assets/logo.jpg.asset.json';
-import flatlay from '@/assets/flatlay.jpg.asset.json';
-import hoodie from '@/assets/hoodie.jpg.asset.json';
-import night from '@/assets/night.jpg.asset.json';
-import green from '@/assets/green.jpg.asset.json';
-import blue from '@/assets/blue.jpg.asset.json';
-import couple from '@/assets/couple.jpg.asset.json';
-import red from '@/assets/red.jpg.asset.json';
-import statement from '@/assets/statement.jpg.asset.json';
-import team from '@/assets/team.jpg.asset.json';
-export const media = { logo:logo.url, flatlay:flatlay.url, hoodie:hoodie.url, night:night.url, green:green.url, blue:blue.url, couple:couple.url, red:red.url, statement:statement.url, team:team.url };
+const base = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/abuti-media/brand`;
+const img = (name: string) => `${base}/${name}.jpg`;
+export const media = { logo:img('logo'), flatlay:img('flatlay'), hoodie:img('hoodie'), night:img('night'), green:img('green'), blue:img('blue'), couple:img('couple'), red:img('red'), statement:img('statement'), team:img('team') };
