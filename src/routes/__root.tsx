@@ -11,6 +11,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import { SessionProvider } from "@/features/session";
+import { BagProvider } from "@/features/bag";
 import { SiteShell } from "@/features/site-shell";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -124,7 +125,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <SessionProvider><SiteShell><Outlet /></SiteShell></SessionProvider> breaks all child routes. */}
-      <SessionProvider><SiteShell><Outlet /></SiteShell></SessionProvider>
+      <SessionProvider><BagProvider><SiteShell><Outlet /></SiteShell></BagProvider></SessionProvider>
     </QueryClientProvider>
   );
 }
