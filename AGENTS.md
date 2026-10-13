@@ -14,3 +14,4 @@
 - Store administrator roles in user_roles and assign them through trusted owner operations only; self-registration never grants editing access.
 - Use immutable CDN asset pointers for provided brand media and the public Cloud bucket for administrator product uploads, keeping both available on external deployments.
 - Keep the catalog empty until the owner adds products; do not synthesize checkout payments or contact delivery without a configured provider.
+- Prebundle React, its renderer, JSX runtimes, and Radix Slot together in Vite to prevent late dependency discovery from mixing React cache generations in the preview.
